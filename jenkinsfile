@@ -6,7 +6,7 @@ pipeline {
   stages {
     stage('Clone') {
       steps{
-        git branch: 'main', url: 'https://github.com/JosephTing91/Trivy_Demo.git'
+        git branch: 'main', url: 'https://github.com/joeting19/Trivy_demo.git'
 
         }
       }    
