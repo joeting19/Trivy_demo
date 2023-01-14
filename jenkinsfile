@@ -1,0 +1,34 @@
+pipeline {
+  agent any
+  environment {
+    WORKSPACE = "${env.WORKSPACE}"
+  }
+  stages {
+    stage('Clone') {
+      steps{
+        git branch: 'main', url: 'https://github.com/JosephTing91/Trivy_Demo.git'
+
+        }
+      }    
+        stage('Build image') {
+            steps {
+                sh 'docker build -t blogapp:v1 .'
+            }
+        }
+        
+        stage('Scan image with Trivy') {
+            steps {
+                sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL --format template --template "@contrib/html.tpl" -o report.html blogapp:v1'
+
+            }
+        }
+
+  }
+       
+           post {
+        always {
+            archiveArtifacts artifacts: "report.html", fingerprint: true
+
+            }
+        } 
+}
